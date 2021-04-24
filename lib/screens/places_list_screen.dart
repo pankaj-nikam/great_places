@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:great_places/screens/add_place_screen.dart';
 
 class PlacesListScreen extends StatelessWidget {
   @override
@@ -9,7 +10,9 @@ class PlacesListScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddPlaceScreen.routeName);
+            },
           ),
         ],
       ),
