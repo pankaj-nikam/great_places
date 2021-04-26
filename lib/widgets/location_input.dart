@@ -13,7 +13,7 @@ class _LocationInputState extends State<LocationInput> {
 
   Future<void> _getCurrentUserLocation() async {
     final locationData = await Location().getLocation();
-    final secret = await SecretLoader().load();
+    final secret = await SecretLoader(secretPath: "secrets.json").load();
     setState(() {
       _previewImageUrl = LocationHelper.generateLocationPreviewImage(
         latitude: locationData.latitude,
