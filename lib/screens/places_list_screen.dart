@@ -18,30 +18,41 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<GreatPlaces>(
-        child: Center(
-          child: const Text('Got no places yet, start adding some!'),
-        ),
-        builder: (context, greatPlaces, child) {
-          if (greatPlaces.items.length <= 0) {
-            return child;
-          }
-          return ListView.builder(
-            itemCount: greatPlaces.items.length,
-            itemBuilder: (context, index) {
-              final current = greatPlaces.items[index];
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: FileImage(current.image),
+      body: FutureBuilder(
+        future: Provider.of<GreatPlaces>(
+          context,
+          listen: false,
+        ).fetchAndSetPlaces(),
+        builder: (context, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer<GreatPlaces>(
+                child: Center(
+                  child: const Text('Got no places yet, start adding some!'),
                 ),
-                title: Text(current.title),
-                onTap: () {
-                  //Go to detail page.
+                builder: (context, greatPlaces, child) {
+                  if (greatPlaces.items.length <= 0) {
+                    return child;
+                  }
+                  return ListView.builder(
+                    itemCount: greatPlaces.items.length,
+                    itemBuilder: (context, index) {
+                      final current = greatPlaces.items[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: FileImage(current.image),
+                        ),
+                        title: Text(current.title),
+                        onTap: () {
+                          //Go to detail page.
+                        },
+                      );
+                    },
+                  );
                 },
-              );
-            },
-          );
-        },
+              ),
       ),
     );
   }
