@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:great_places/helpers/location_helper.dart';
+import 'package:great_places/helpers/secret_loader.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
@@ -12,10 +13,12 @@ class _LocationInputState extends State<LocationInput> {
 
   Future<void> _getCurrentUserLocation() async {
     final locationData = await Location().getLocation();
+    final secret = await SecretLoader().load();
     setState(() {
       _previewImageUrl = LocationHelper.generateLocationPreviewImage(
         latitude: locationData.latitude,
         longitude: locationData.longitude,
+        apiKey: secret.apiKey,
       );
     });
   }
