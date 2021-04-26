@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:great_places/helpers/location_helper.dart';
+import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
   @override
@@ -7,6 +9,17 @@ class LocationInput extends StatefulWidget {
 
 class _LocationInputState extends State<LocationInput> {
   String _previewImageUrl;
+
+  Future<void> _getCurrentUserLocation() async {
+    final locationData = await Location().getLocation();
+    setState(() {
+      _previewImageUrl = LocationHelper.generateLocationPreviewImage(
+        latitude: locationData.latitude,
+        longitude: locationData.longitude,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,7 +36,7 @@ class _LocationInputState extends State<LocationInput> {
                 )
               : Image.network(
                   _previewImageUrl,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                   width: double.infinity,
                 ),
         ),
@@ -31,7 +44,7 @@ class _LocationInputState extends State<LocationInput> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton.icon(
-              onPressed: () {},
+              onPressed: _getCurrentUserLocation,
               icon: Icon(Icons.location_on),
               label: Text('Current Location'),
             ),
